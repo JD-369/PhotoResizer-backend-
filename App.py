@@ -6,8 +6,7 @@ import os
 app = Flask(__name__)
 
 # Enable CORS for specific origins (add your Netlify URL here)
-CORS(app, origins=["https://pscpicresizer.netlify.app"])
-
+CORS(app)
 # Resize image endpoint
 @app.route('/resize', methods=['POST'])
 def resize_image():
