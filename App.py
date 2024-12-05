@@ -1,12 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from PIL import Image
 import os
+import tempfile
 
 app = Flask(__name__)
 
 # Enable CORS for specific origins (add your Netlify URL here)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://genuine-frangollo-849698.netlify.app"}})
+
 # Resize image endpoint
 @app.route('/resize', methods=['POST'])
 def resize_image():
@@ -21,14 +23,20 @@ def resize_image():
         # Open the image using PIL
         image = Image.open(image_file)
         
+        # Check image format (optional: you can allow other formats)
+        if image.format not in ['JPEG', 'PNG']:
+            return jsonify({"error": "Unsupported image format"}), 415
+        
         # Resize the image (height=200px, width=150px)
         resized_image = image.resize((150, 200))
         
-        # Save the resized image to a temporary file
-        output_path = "resized_image.jpg"
-        resized_image.save(output_path)
+        # Create a temporary file to store the resized image
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
+        resized_image.save(temp_file.name)
         
-        return jsonify({"message": "Image resized successfully"}), 200
+        # Send the resized image back as a response
+        return send_file(temp_file.name, mimetype='image/jpeg')
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
