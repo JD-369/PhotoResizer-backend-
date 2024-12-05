@@ -4,7 +4,8 @@ from PIL import Image
 import io
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=["https://pscpicresizer.netlify.app/"])
+
 
 @app.route('/resize', methods=['POST'])
 def resize_image():
