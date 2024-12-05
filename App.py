@@ -7,7 +7,7 @@ import tempfile
 app = Flask(__name__)
 
 # Enable CORS for specific origins (add your Netlify URL here)
-CORS(app, resources={r"/*": {"origins": "https://genuine-frangollo-849698.netlify.app"}})
+CORS(app, resources={r"/*": {"origins": "https://pcsphotoresizer.netlify.app"}})
 
 # Resize image endpoint
 @app.route('/resize', methods=['POST'])
